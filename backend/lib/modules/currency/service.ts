@@ -8,8 +8,12 @@ export default class CurrencyService {
         _session.save(callback);
     }
 
-    public getAll(query: any, callback: any) {
-        currencys.find(query, callback);
+    public getAll(req: any, callback: any) {
+        if(req.query.search){
+            currencys.find({full_name: { $regex: '.*' + req.query.search + '.*' } }, callback);
+        } else {
+            currencys.find({}, callback);
+        }
     }
 
     public filterCurrency(query: any, callback: any) {

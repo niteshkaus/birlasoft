@@ -4,11 +4,13 @@ import DataTable from 'react-data-table-component';
 import Currency from "../models/currency";
 import BaseService from "../service/base.service";
 import * as toastr from "toastr";
+
 interface IProps { currencyListUpdated: boolean}
 interface IState {
   listCurrency: Array<Currency>;
   isReady: Boolean;
   hasError: Boolean;
+  filterText?: string;
 }
 
 class Index extends React.Component<IProps, IState> {
@@ -16,6 +18,7 @@ class Index extends React.Component<IProps, IState> {
     listCurrency: new Array<Currency>(),
     isReady: false,
     hasError: false,
+    filterText: "",
   };
   public columns: any = [];
   constructor(props: IProps) {
@@ -24,6 +27,7 @@ class Index extends React.Component<IProps, IState> {
       isReady: false,
       listCurrency: Array<Currency>(),
       hasError: false,
+      filterText: ""
     };
     this.columns = [
       {
@@ -58,8 +62,9 @@ class Index extends React.Component<IProps, IState> {
     this.fetchData();
   }
 
-  public fetchData = () => {
-    BaseService.getAll<Currency>("/currency").then((rp) => {
+  public fetchData = (value: any = '') => {
+    let queryparams = (value !== '' ? '/?search='+value : '')
+    BaseService.getAll<Currency>("/currency"+queryparams).then((rp) => {
       if (rp.Status) {
         const data = rp.Data;
         const listCurrency = new Array<Currency>();
@@ -98,7 +103,6 @@ class Index extends React.Component<IProps, IState> {
   }
 
   public tabRow = () => {
-    console.log('tabrow')
     if (!this.state.isReady) {
       return (
         <tr>
@@ -120,17 +124,22 @@ class Index extends React.Component<IProps, IState> {
           </td>
         </tr>
       );
-    }
-console.log(this.state.listCurrency);
-    // return this.state.listCurrency.map(function (object, i) {
-    //   return <TableRow key={i} index={i + 1} currency={object} />;
-    // });
+    }    
   };
 
   public render(): React.ReactNode {
     return (
       <div>
-        {/* <h3 className="text-center">Currency List</h3> */}
+        <div className="search">
+        <span className="">Search: </span>
+        <input
+          className="inputlabel"
+          type="text"
+          defaultValue={this.state.filterText}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => this.fetchData(e.target.value)}
+
+        />
+      </div>
 
         <DataTable
         title="Currency List"

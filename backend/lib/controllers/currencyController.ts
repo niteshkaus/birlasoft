@@ -37,7 +37,7 @@ export class CurrencyController {
     }
 
     public getAll(req: Request, res: Response) {
-        this.currency_service.getAll({}, (err: any, currency_data: ICurrency) => {
+        this.currency_service.getAll(req, (err: any, currency_data: ICurrency) => {
             if (err) {
                 mongoError(err, res);
             } else {

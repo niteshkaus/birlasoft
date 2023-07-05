@@ -20,3 +20,19 @@
 .App-link {
   color: #09d3ac;
 }
+
+ 
+.search{
+  margin:10px;
+  display:block;
+  float:right;
+  color:#6b6c72;
+}
+
+.inputlabel{
+  border: 1px solid #d6d6d6;
+  padding: 8px;
+  width: 150px;
+  vertical-align: middle;
+}
+
